@@ -1,1 +1,58 @@
 # hotspots
+
+- high-level technical architecture
+	- A logical controller and cell-based system where each cell has these properties
+		- Cell
+		  collapsed:: true
+			- Coordinate
+			- Windspeed
+			- Wind direction
+			- Terrain
+			- Resources
+				- Personnel
+				- Aircrafts
+				- Vehicles
+			- Fuel
+				- Class
+				- Percent
+			- Fires
+				- Probability
+				- Size
+				- Severity?
+		- Controller
+	- SourceDB - Simulated cell state management + updating based on rules
+		- Rules:
+		  collapsed:: true
+			- Wind
+	- WildfireMonitor - polls sourceDB  to detect existing and potential fires. Emits a detection event
+		- Detection
+		  collapsed:: true
+			- Cell
+			- Fires
+				- Probability
+				- Size
+				- Severity (for the individual fire)
+			- Detection Severity
+			- Status
+				- Active
+				- Predicted
+				- Mitigated
+	- DetectionMonitor - reads active and predicted detections and outputs a Plan object
+		- MitigationPlan (array of actions)
+			- ordered? (bool)
+			- Action (arr)
+				- Cell
+				- Type
+					- (deploy_drone)
+					- (deploy_man)
+					- (evacuate_cell)
+					- (none_needed)
+	- PlanHandler - inputs a plan and performs the actions
+		- type-action mappings:
+			- deploy_drone
+			- deploy_man
+				- add X man to resource
+			- evacuate_cell
+				- reduce cell personell resources to zero (not instantly, over a time proportional to the amount of people present)
+			- none_needed
+				- do nothing, respond cell mitigated to Parent
