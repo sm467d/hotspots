@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wildfire Detection",
+  "description": "Schema for wildfire detection events in the Hotspots system",
+  "type": "object",
+  "required": ["id", "timestamp", "cell", "fires", "detectionSeverity", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the detection event"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the detection occurred"
+    },
+    "cell": {
+      "type": "object",
+      "required": ["coordinate", "environmentalData", "resources", "fuel"],
+      "properties": {
+        "coordinate": {
+          "type": "object",
+          "required": ["latitude", "longitude"],
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          }
+        },
+        "environmentalData": {
+          "type": "object",
+          "required": ["windspeed", "windDirection", "terrain"],
+          "properties": {
+            "windspeed": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Wind speed in meters per second"
+            },
+            "windDirection": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 360,
+              "description": "Wind direction in degrees (0-360)"
+            },
+            "terrain": {
+              "type": "string",
+              "enum": ["urban", "forest", "grassland", "desert", "mixed"],
+              "description": "Type of terrain in the cell"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "required": ["personnel", "aircraft", "vehicles"],
+          "properties": {
+            "personnel": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of available personnel"
+            },
+            "aircraft": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of available aircraft"
+            },
+            "vehicles": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of available vehicles"
+            }
+          }
+        },
+        "fuel": {
+          "type": "object",
+          "required": ["class", "percent"],
+          "properties": {
+            "class": {
+              "type": "string",
+              "enum": ["A", "B", "C", "D", "K"],
+              "description": "Fire classification based on fuel type"
+            },
+            "percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Percentage of fuel remaining"
+            }
+          }
+        }
+      }
+    },
+    "fires": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["probability", "size", "severity"],
+        "properties": {
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Probability of fire occurrence (0-1)"
+          },
+          "size": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Size of the fire in square meters"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"],
+            "description": "Severity level of the individual fire"
+          }
+        }
+      }
+    },
+    "detectionSeverity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Overall severity level of the detection"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "predicted", "mitigated"],
+      "description": "Current status of the detection"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the detection",
+      "properties": {
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence score of the detection (0-1)"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source of the detection (e.g., satellite, ground sensor, drone)"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional tags or labels for the detection"
+        }
+      }
+    }
+  }
+} 

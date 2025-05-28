@@ -1,0 +1,43 @@
+{
+  "id": "det_2025032301",
+  "timestamp": "2025-03-23T14:30:00Z",
+  "cell": {
+    "coordinate": {
+      "latitude": 34.0522,
+      "longitude": -118.2437
+    },
+    "environmentalData": {
+      "windspeed": 15.5,
+      "windDirection": 270,
+      "terrain": "urban"
+    },
+    "resources": {
+      "personnel": 25,
+      "aircraft": 2,
+      "vehicles": 8
+    },
+    "fuel": {
+      "class": "A",
+      "percent": 85
+    }
+  },
+  "fires": [
+    {
+      "probability": 0.85,
+      "size": 1200,
+      "severity": "high"
+    },
+    {
+      "probability": 0.65,
+      "size": 800,
+      "severity": "medium"
+    }
+  ],
+  "detectionSeverity": "high",
+  "status": "active",
+  "metadata": {
+    "confidence": 0.92,
+    "source": "satellite",
+    "tags": ["urban_area", "high_wind", "multiple_fires"]
+  }
+} 
