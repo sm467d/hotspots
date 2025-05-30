@@ -9,13 +9,27 @@ load_dotenv()
 
 # MongoDB connection
 MONGO_URI = os.getenv('MONGO_URI')
+DB_NAME = os.getenv('DB_NAME')
 NUM_DETECTIONS = 100
 
 def generate_detections():
     try:
         # Connect to MongoDB
-        client = MongoClient(MONGO_URI)
-        db = client.get_default_database()
+        print(f"Attempting to connect to MongoDB...")
+        print(f"MONGO_URI: {MONGO_URI[:20]}..." if MONGO_URI else "MONGO_URI not set")
+        print(f"DB_NAME: {DB_NAME}" if DB_NAME else "DB_NAME not set")
+        
+        if not MONGO_URI:
+            raise ValueError("MONGO_URI environment variable is not set")
+        if not DB_NAME:
+            raise ValueError("DB_NAME environment variable is not set")
+            
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        # Test the connection
+        client.server_info()
+        print("Successfully connected to MongoDB")
+        
+        db = client[DB_NAME]
         detections_collection = db.detections
 
         # Clear existing detections
